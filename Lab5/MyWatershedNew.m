@@ -1,3 +1,4 @@
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Watershed exemple, partly from Matlab
 % Written  by Maria Magnusson, 2007-05-08
@@ -26,11 +27,19 @@ colormap(gray), colorbar;
 %--------------------------------------------------
 D = bwdist(~bw);
 
+figure(13), imshow(D,[],'InitialMagnification','fit');
+title('Distance transform of ~bw');
+colormap(jet), colorbar;
+
 % Change the sign of the distance transform and 
 % set pixels outside the object to the minimum value
 %---------------------------------------------------
 Dinv = -D;
 Dinv(~bw) = min(min(Dinv));
+
+figure(10), imshow(Dinv,[],'InitialMagnification','fit');
+title('Complement distance transform of bw');
+colormap(jet), colorbar;
 
 % Search for regional min
 %------------------------
@@ -48,6 +57,10 @@ for no = 1:NumObj
   labelim(labelstruct.PixelIdxList{no}) = no;
 end
 
+figure(12), imshow(labelim,[],'InitialMagnification','fit');
+colormap(jet), colorbar;
+title('labeling of regional min');
+
 % Compute the watershed transform
 %--------------------------------
 W1 = watershed_meyer(Dinv,8,labelstruct);
@@ -57,6 +70,15 @@ loc = find(W1==1);
 W2(loc) = 0;
 
 W2T = W2>=1;
+
+figure(9), imshow(W2T,'InitialMagnification','fit'), title('bw');
+colormap(gray), colorbar;
+
+%--------------Tar ut de små cellerna-------------
+%-------------------------------------------------
+%-------------------------------------------------
+%-------------------------------------------------
+
 
 
 % Compute the distance transform outside the objects
