@@ -35,7 +35,7 @@ tmp = bwmorph(tmp,'dilate',2);
 tmp = bwmorph(tmp,'dilate',1);
 im1bTmorph = bwmorph(tmp,'erode',1);
 
-figure(7), imshow(im1bTmorph,[0 1]), colormap(gray), colorbar;
+
 
 CellKernels = Watershed(100,im1bTmorph);
 
@@ -58,7 +58,7 @@ ImDone(:,:,1)=im1r;
 ImDone(:,:,2)=im1g;
 ImDone(:,:,3)=im1b;
 
-%figure(14), imshow(ImDone/255);
+figure(14), imshow(ImDone/255);
 
 % Take out the area 6
 imArea = im1;
@@ -181,7 +181,7 @@ end
 
 
 
-%figure(22), imshow(imny/255);
+figure(22), imshow(imny/255);
 
 %---------------------------------------------------------------
 
@@ -203,5 +203,5 @@ end
 
 
 
-%figure(23), imshow(imny/255);
+figure(23), imshow(imny/255);
 

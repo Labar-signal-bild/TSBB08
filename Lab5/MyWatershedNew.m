@@ -20,7 +20,7 @@ bw1 = sqrt((x-center1x).^2 + (y-center1y).^2) <= radius;
 bw2 = sqrt((x-center2x).^2 + (y-center2y).^2) <= radius;
 bw3 = sqrt((x-center3x).^2 + (y-center3y).^2) <= radius;
 bw = bw1 | bw2 | bw3;
-figure(1), imshow(bw,'InitialMagnification','fit'), title('bw');
+%figure(1), imshow(bw,'InitialMagnification','fit'), title('bw');
 colormap(gray), colorbar;
 
 % Compute the distance transform inside the objects
@@ -57,7 +57,7 @@ for no = 1:NumObj
   labelim(labelstruct.PixelIdxList{no}) = no;
 end
 
-figure(12), imshow(labelim,[],'InitialMagnification','fit');
+%figure(12), imshow(labelim,[],'InitialMagnification','fit');
 colormap(jet), colorbar;
 title('labeling of regional min');
 
@@ -71,7 +71,7 @@ W2(loc) = 0;
 
 W2T = W2>=1;
 
-figure(9), imshow(W2T,'InitialMagnification','fit'), title('bw');
+%figure(9), imshow(W2T,'InitialMagnification','fit'), title('bw');
 colormap(gray), colorbar;
 
 %--------------Tar ut de små cellerna-------------
@@ -100,9 +100,9 @@ Dinv(A)=1;
 Dinv(B)=0;
 Dinv(C)=1;
 
-figure(3), imshow(Dinv,[],'InitialMagnification','fit');
-title('Complement distance transform of bw');
-colormap(jet), colorbar;
+%figure(3), imshow(Dinv,[],'InitialMagnification','fit');
+%title('Complement distance transform of bw');
+%colormap(jet), colorbar;
 
 % Perform labeling
 %-----------------
@@ -115,25 +115,25 @@ labelim = zeros(labelstruct.ImageSize);
 for no = 1:NumObj
   labelim(labelstruct.PixelIdxList{no}) = no;
 end
-figure(5), imshow(labelim,[],'InitialMagnification','fit');
-colormap(jet), colorbar;
-title('labeling of regional min');
+%figure(5), imshow(labelim,[],'InitialMagnification','fit');
+%colormap(jet), colorbar;
+%title('labeling of regional min');
 
 % Compute the watershed transform
 %--------------------------------
 W1 = watershed_meyer(D,8,labelstruct);
-figure(6), imshow(W1,[],'InitialMagnification','fit');
-colormap(jet), colorbar;
-title('Watershed of Dinv');
+%figure(6), imshow(W1,[],'InitialMagnification','fit');
+%colormap(jet), colorbar;
+%title('Watershed of Dinv');
 
 W2 = W1;
 loc = find(W1==1);
 W2(loc) = 0;
-figure(7), imshow(W2,[],'InitialMagnification','fit');
-colormap(jet), colorbar;
-title('Fixed Watershed of Dinv')
+%figure(7), imshow(W2,[],'InitialMagnification','fit');
+%colormap(jet), colorbar;
+%title('Fixed Watershed of Dinv')
 
 W2T = W2>=1;
-figure(8), imshow(W2T,[],'InitialMagnification','fit');
-colormap(gray), colorbar;
-title('Final segmentation result')
+%figure(8), imshow(W2T,[],'InitialMagnification','fit');
+%colormap(gray), colorbar;
+%title('Final segmentation result')
