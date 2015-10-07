@@ -41,43 +41,115 @@ In image \ref{fig:CellPart} we have isolated a single cell and counted its 14 pa
 \end{figure}
 
 
-To get the image shown in image \ref{fig:CellLinesNCircles} segmentation
-on the original image has to be done. To do so the first step is to get an "clean" image over the
-six cell kernels. This is done by threshholding image 4 (!!!!!!!INSERT IMAGE 4!!!!!!) which is
-just the blue part of the original image. The threshhold is determined by looking at
-a histogram of the blue original image. When the image is threshholded it still
-contains some rubbish, see image 6 (!!!!!!!!!!INSERT IMAGE 6!!!!!!!).
-By performing opening and closing the rubbish is removed from the image and image 7
-	(!!!!!!!!!INSERT IMAGE 7!!!!!!!) is reseved.
+%
+%     WATERSHED SEGMENTATION
+%
 
-When a clean image over the cell kernels is made a watershed algorithm is performed
-on the image. First a distance transform is made inside the objects and then the sign
+\section{Watershed segmentation 1} \label{sec:WatSeg1}
+To get the image shown in image \ref{fig:CellLinesNCircles}, segmentation
+on the original image has to be done. To do so the first step is to get an binary image over the
+six cell kernels. This is done by threshholding image \ref{fig:ImColourBlue} which is
+just the blue part of the original image. The threshold is determined by looking at
+a histogram of image \ref{fig:ImColourBlue}. When the image is thresholded it still
+contains some rubbish, see image \ref{fig:CellKernelsThreshRough}. By performing
+opening and closing the rubbish is removed and image \ref{fig:CellKernelsThresSmooth} is received.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.3\textwidth]{Bilder/CellLinesNCircles.pdf}
+\caption{The blue spectrum of the original image.}
+\label{fig:ImColourBlue}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.3\textwidth]{Bilder/ThershholdedKernels.pdf}
+\caption{A rough binary image of the cell kernels.}
+\label{fig:CellKernelsThreshRough}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.3\textwidth]{Bilder/BWCleanKernels.pdf}
+\caption{A smooth binary image of the cell kernels.}
+\label{fig:CellKernelsThresSmooth}
+\end{figure}
+
+When a clean image over the cell kernels is made the watershed algorithm can be performed.
+First a distance transform is made inside the objects, then the sign
 of the distance transform is changed and the pixels outside the objects are set
-to the minimum value, see image 13 and image 10
-(!!!!INSERT IMAGE 13!!!!)(INSERT IMAGE 10). All of the regional minimum values
-are located and labeled. Image 11 (!!!!!INSERT IMAGE 11!!!!!!!!!!!) is a close up
-on some of the regional minimums that are found. The purpose of finding the
-regional minimum values is to get one minumum value in each cell kernel so that
-the watershed transform algorithm can be executed. As shown in image 11 there are
-more then one minimum value in each kernel and also some "false minimum" inbetween
-the two kernels that is overlapping. To get rid of these "false minimum values" a
-demand on the depth of the minimum values are set. This removes some of the unwanted
+to the minimum value, see image \ref{fig:CellKernelsDist} and image \ref{fig:CellKernelsDistInv}. All of the regional minimum values
+are located and labeled. Image \ref{fig:CellKernelsMinimum} is a close up off some of the regional minimums that are found.
+The purpose of finding regional minimum values is to get one minumum value in each cell kernel so that
+the watershed transform algorithm can be executed. As shown in image \ref{fig:CellKernelsMinimum} there are
+more then one minimum value in each kernel and also some "false minimum" inbetween kernels that are overlapping.
+To get rid of these "false minimums" a demand on the depth of the minimum values are set. This removes some of the unwanted
 minimums but there are still some extra minimums in the middle of the kernels. This
-was solved by performing opening on the image which made the close single pixel
-minimums into one minimum containing several pixels, see image 14 (!!!!!INSERT A ZOOMED IN IMGE 14!!!).
+was solved by performing opening on the image which made the minimums in cell kernel centers close into a single shape,
+see image \ref{fig:CellKernelsMinimumOpened}.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.3\textwidth]{Bilder/DistanceTransformInsideKernels.pdf}
+\caption{A distancemap inside of the cell kernels.}
+\label{fig:CellKernelsDist}
+\end{figure}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.3\textwidth]{Bilder/InvertedDistanceMap.pdf}
+\caption{A inverted distancemap inside of the cell kernels.}
+\label{fig:CellKernelsDistInv}
+\end{figure}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.3\textwidth]{Bilder/CellLinesNCircles.pdf}
+\caption{Some local minimus of the cell kernels.}
+\label{fig:CellKernelsMinimum}
+\end{figure}
 
-\section{Watershed segmentation 1}
-Inorder to use our warershed algorithm we first need to get a binnary image of the cell kernels. The cell kernels are mostly located
-in the blue image so we start by looking at it's hitogram and then threshholding it. That gives us
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.3\textwidth]{Bilder/CellLinesNCircles.pdf}
+\caption{Some local minimus that have been dialated.}
+\label{fig:CellKernelsMinimumOpened}
+\end{figure}
+
 
 \section{Watershed segmentation 2}
+In order to get a properly segmented image over the cell kernels with the
+surrounding cytoplasm we start with the binary image \ref{},we the preform a
+simular watershed algorithm as in section \ref{sec:WatSeg1}. First a distance
+map is performed outside of the cell kernels. Then the distance map is
+inverted and values lower then a threshold is set to that threshold, se image \ref{}.
+Then we threshold it and remove the cell kernels from image \ref{} which gives us image \ref{}.
+Removing the cell kernels from the center of the image is done inorder to create centers for the
+watershed algorithm to begin "filling" water. Before the watershed algorithm can
+be applied the different centers need to be labeled, se image \ref{}.
+After labeling the watershed algorithm can be used resulting in image \ref{}.
+From image \ref{} we can get the binary image \ref{}.
 
-\section{Morphological image processing}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.3\textwidth]{Bilder/CellLinesNCircles.pdf}
+\caption{Some local minimus that have been dialated.}
+\label{fig:CellKernelsMinimumOpened}
+\end{figure}
 
 \section{Localization of padlock-signals}
+One method to detect the padlock signals in image \ref{} is to use a negative
+laplacian filter on image \ref{} to enhance local maximas, see image \ref{}.
+To get rid of weak responses from noise \image{} is thresholded and then multiplied with image \ref{}.
+Taking out the regionalmax gives us the pixels representing the center of the padlock-signals.
+
+\section{Outlining cytoplasm}
+Getting the pixels representing the borders between different cells cytoplasma can
+easily be done be taking out the pixels with value zero from image \ref{}.
+These pixels are then colored yellow in image \ref{} and image \ref{} is given.
+By taking out the pixels representing cell kernel and cell cytoplasm 6 from image
+\ref{}, image \ref{} is created. The 14 padlock signals can then be located and
+be marked with cyan cirkels in image \ref{} giving us our final result in image \ref{}.
 
 
 \end{document}
