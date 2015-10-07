@@ -63,6 +63,9 @@ title('T22 after Lp')
 
 
 T12 = fx.*fy;
+T12Lp = conv2(T12,lpH,'same');
+T12Lp = conv2(T12Lp,lpV,'same');
+
 z = (T11-T22) +i*2*T12;
 zg = fx + i*fy;
 
@@ -73,14 +76,9 @@ axis image; axis off;
 title('T11-T22')
 subplot(1,2,2); imagesc((2*T12), [-2500 2500]); colorbar('horizontal'); 
 axis image; axis off;
-title('2*T22')
-
-
+title('2*T12')
 
 magimage = abs(z);
-magimage=conv2(magimage,lpH,'same');
-magimage=conv2(magimage,lpV,'same');
-
 
 angularimage = atan2(2*T12Lp,T11Lp - T22Lp);
 
@@ -97,9 +95,9 @@ end
 
 figure(5)
 colormap(gray(256));
-imagesc(magimage, [0 5000]); colorbar('horizontal'); 
+imagesc(magimage, [0 4500]); colorbar('horizontal'); 
 axis image; axis off;
-title('T11 after Lp')
+title('abs(z)')
 
 
 figure(6)
@@ -118,15 +116,16 @@ title('T22 after Lp')
 %%
 
 im = double(rgb2gray(imread('chess.png')));
+histo = histogram(im);
+
+figure(15); stem(histo);
+%imtmp = im<100;
 
 fx=conv2(im,df, 'valid');
 maxv = max(max(abs(fx)))/2;
 fy=conv2(im,df2, 'valid');
 maxv2 = max(max(abs(fy)))/2;
 
-tmp = [fx fy];
-
-T = tmp'*tmp;
 T11 = fx.^2;
 T22 = fy.^2;
 T12 = fx.*fy;
@@ -134,39 +133,67 @@ T12 = fx.*fy;
 maxv = max(max(abs(T11)))/2;
 maxv2 = max(max(abs(T22)))/2;
 
-cHarris = (T11*T22-T12^2) - 0.05*(T11+T22)^2;
+k = 0.1;
+cHarris = (T11.*T22-T12.^2) - k*(T11+T22).^2;
 maxv = max(max(abs(cHarris)))/2;
 
 histo = histogram(cHarris);
 figure(10); stem(histo);
 
-cHarrisNew = -cHarris>25000000;
+cHarrisNew = -cHarris>100;
 maxv2 = max(max(abs(cHarrisNew)))/2;
 
 figure(21)
 colormap(gray(256))
-imagesc(-cHarris, [-maxv maxv]); colorbar('horizontal'); 
+imagesc(cHarrisNew, [-maxv2 maxv2]); colorbar('horizontal'); 
 axis image; axis off;
-title('f_x')
+title('cHarrisNew')
 
-RegMax = imregionalmax(-cHarris, 4);
+RegMax = imregionalmax(cHarris, 4);
+figure(23)
+colormap(gray(256))
+imagesc(RegMax, [0 maxv2]); colorbar('horizontal'); 
+axis image; axis off;
+title('cHarrisNew')
+
 
 corners = cHarrisNew .* RegMax;
 cornerpoints = find(corners == 1);
 
-cornervalues = cHarris(cornerpoints);
+cornervalues = im(cornerpoints);
+cornermatrix = [cornervalues cornerpoints];
 
+filtercornerpoints = cornerpoints;
+j = 1;
 
+for i = 1:length(cornervalues)
+    if cornermatrix(i,1) < 200
+        deletecornerpixels(j) = cornermatrix(i,2);
+        j = j + 1;
+    end
+end
 
+%for i = 1:length(deletecornerpixels)
+ %   corners(deletecornerpixels(i)) = 0;
+%end
+cornerpointx = zeros(length(cornerpoints), 1);
+cornerpointy = zeros(length(cornerpoints), 1);
+
+for i = 1:length(cornerpoints)
+    cornerpointx(i) = floor(cornerpoints(i)/400)+1;
+    cornerpointy(i) = cornerpoints(i) - floor(cornerpoints(i)/100)*100;
+end
 
 figure(22)
 colormap(gray(256))
-imagesc(corners, [0 1]); colorbar('horizontal'); 
+imagesc(corners, [0 1]); colorbar('horizontal');
+hold on;
 axis image; axis off;
 title('f_x')
 
 
-
+figure(30); imagesc(im); colormap(gray(256))
+figure(30);hold('on');plot(cornerpointx,cornerpointy, 'go')
 
 
 
