@@ -46,10 +46,9 @@ In figure \ref{fig:CellPart} we have isolated a single cell and counted its 14 p
 
 \section{Watershed segmentation 1} \label{sec:WatSeg1}
 To get the image shown in figure \ref{fig:CellLinesNCircles}, segmentation
-on the original image has to be done. To do so the first step is to get an binary image over the
-six cell kernels. This is done by threshholding figure \ref{fig:ImColourBlue} which is
-just the blue part of the original image. The threshold is determined by looking at
-a histogram of figure \ref{fig:ImColourBlue}. When the image is thresholded it still
+on the original image has to be done. To do so the first step is to get a binary image over the
+six cell kernels. This is done by threshholding just the blue part(which represent the cell kernels)  of the original image. The threshold is determined by looking at
+a histogram of that image. When the image is thresholded it still
 contains some rubbish, see figure \ref{fig:CellKernelsThreshRough}. By performing
 opening and closing the rubbish is removed and figure \ref{fig:CellKernelsThresSmooth} is received.
 
@@ -66,12 +65,6 @@ minimums but there are still some extra minimums in the middle of the kernels. T
 was solved by performing opening on the image which made the minimums in cell kernel centers close into a single shape,
 see figure \ref{fig:CellKernelsMinimumOpened}.
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.3\textwidth]{Bilder/CellLinesNCircles.pdf}
-\caption{The blue spectrum of the original image.}
-\label{fig:ImColourBlue}
-\end{figure}
 
 \begin{figure}[ht]
 \centering
@@ -117,7 +110,7 @@ see figure \ref{fig:CellKernelsMinimumOpened}.
 
 \section{Watershed segmentation 2}
 In order to get a properly segmented image over the cell kernels with the
-surrounding cytoplasm we start with the binary figure \ref{fig:CellKernelsThresSmooth},we the preform a
+surrounding cytoplasm we start with the binary image shown in figure \ref{fig:CellKernelsThresSmooth}. Then preform a
 simular watershed algorithm as in section \ref{sec:WatSeg1}. First a distance
 map is performed outside of the cell kernels, see figure \ref{fig:CellDist}. Then the distance map is
 inverted and values lower then a threshold is set to that threshold.
@@ -126,7 +119,7 @@ Removing the cell kernels from the center of the image is done in order to creat
 watershed algorithm to begin "filling" water. Before the watershed algorithm can
 be applied the different centers need to be labeled, see figure \ref{fig:CellCyto}.
 After labeling, the watershed algorithm can be used, resulting in figure \ref{fig:CellLabeled}.
-From which the binary figure \ref{fig:CellBw} can be created.
+From which the binary image shown in figure \ref{fig:CellBw} can be created.
 
 \begin{figure}[ht]
 \centering
@@ -168,7 +161,7 @@ Getting the pixels representing the borders between different cells cytoplasma c
 easily be done be taking out the pixels with value zero from figure \ref{fig:CellLabeled}.
 These pixels are then colored yellow, see figure \ref{fig:CellLines}.
 By taking out the pixels representing cell kernel and cell cytoplasm 6 from figure
-\ref{fig:ImColour}, figure \ref{fig:CellPart} is created. The 14 padlock signals can then be located and marked with cyan cirkels, resulting in the finished figure \ref{fig:CellLinesNCircles}.
+\ref{fig:ImColour}, figure \ref{fig:CellPart} is created. The 14 padlock signals can then be located and marked with cyan cirkels, resulting in the finished image shown in figure \ref{fig:CellLinesNCircles}.
 
 \begin{figure}[ht]
 \centering
