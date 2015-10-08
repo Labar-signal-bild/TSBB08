@@ -165,10 +165,17 @@ From which the binary image \ref{fig:CellBw} can be created.
 
 \section{Outlining cytoplasm}
 Getting the pixels representing the borders between different cells cytoplasma can
-easily be done be taking out the pixels with value zero from image \ref{}.
-These pixels are then colored yellow in image \ref{} and image \ref{} is given.
+easily be done be taking out the pixels with value zero from image \ref{fig:CellLabeled}.
+These pixels are then colored yellow, see image \ref{fig:CellLines}.
 By taking out the pixels representing cell kernel and cell cytoplasm 6 from image
-\ref{}, image \ref{} is created. The 14 padlock signals can then be located and
-be marked with cyan cirkels in image \ref{} giving us our final result in image \ref{}.
+\ref{fig:ImColour}, image \ref{fig:CellPart} is created. The 14 padlock signals can then be located and marked with cyan cirkels, resulting in the finished image \ref{fig:CellLinesNCircles}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\textwidth]{Bilder/CellLines.pdf}
+\caption{Lines inserted in to original image.}
+\label{fig:CellLines}
+\end{figure}
+
 
 \end{document}
