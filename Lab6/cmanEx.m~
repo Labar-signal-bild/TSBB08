@@ -140,7 +140,7 @@ maxv = max(max(abs(cHarris)))/2;
 histo = histogram(cHarris);
 figure(10); stem(histo);
 
-cHarrisNew = -cHarris>100;
+cHarrisNew = -cHarris>1000;
 maxv2 = max(max(abs(cHarrisNew)))/2;
 
 figure(21)
@@ -157,44 +157,50 @@ axis image; axis off;
 title('cHarrisNew')
 
 
-corners = cHarrisNew .* RegMax;
-cornerpoints = find(corners == 1);
+corners = cHarrisNew .* RegMax; %Ger en bild med 1 på alla corners den hittar
+cornerpoints = find(corners == 1); %Ger en vector med pixlar på alla vita corners
 
-cornervalues = im(cornerpoints);
-cornermatrix = [cornervalues cornerpoints];
+cornerpointx = zeros(length(cornerpoints), 1);
+cornerpointy = zeros(length(cornerpoints), 1);
 
-filtercornerpoints = cornerpoints;
-j = 1;
-
-for i = 1:length(cornervalues)
-    if cornermatrix(i,1) < 200
-        deletecornerpixels(j) = cornermatrix(i,2);
-        j = j + 1;
-    end
+for i = 1:length(cornerpoints) %Gör om pixlar till x,y koordinater
+    cornerpointx(i) = floor(cornerpoints(i)/398)+1;
+    cornerpointy(i) = cornerpoints(i) - floor(cornerpoints(i)/398)*398;
 end
+
+
+%cornervalues = im(cornerpoints);
+%cornermatrix = [cornervalues cornerpoints];
+
+%deletecornerpoints = cornerpoints;
+%j = 1;
+
+%for i = 1:length(cornervalues)
+ %   if cornermatrix(i,1) < 200
+  %      deletecornerpixels(1,j) = cornermatrix(i,2);
+ %       j = j + 1;
+   % end
+%end
 
 %for i = 1:length(deletecornerpixels)
  %   corners(deletecornerpixels(i)) = 0;
 %end
-cornerpointx = zeros(length(cornerpoints), 1);
-cornerpointy = zeros(length(cornerpoints), 1);
 
-for i = 1:length(cornerpoints)
-    cornerpointx(i) = floor(cornerpoints(i)/400)+1;
-    cornerpointy(i) = cornerpoints(i) - floor(cornerpoints(i)/100)*100;
-end
+r = ones(length(cornerpointx), 1)*3;
 
 figure(22)
 colormap(gray(256))
 imagesc(corners, [0 1]); colorbar('horizontal');
 hold on;
-axis image; axis off;
+%viscircles([cornerpointx cornerpointy], r ,'EdgeColor', 'r');
+%axis image; axis off;
 title('f_x')
 
 
-figure(30); imagesc(im);
-figure(30);hold('on');plot(y1(1,:),y1(2,:),'go')
 
+figure(30); imagesc(im); colormap(gray(256))
+figure(30);hold('on');%plot(cornerpointx,cornerpointy, 'go')
+viscircles([cornerpointx cornerpointy], r ,'EdgeColor', 'r');
 
 
 
